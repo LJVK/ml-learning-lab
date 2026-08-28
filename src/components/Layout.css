@@ -1,0 +1,24 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.main-content {
+  flex: 1;
+  padding: 56px 72px;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 32px 20px;
+  }
+}

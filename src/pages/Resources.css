@@ -1,0 +1,53 @@
+.resources-page {
+  max-width: 1100px;
+}
+
+.resource-list {
+  display: grid;
+  gap: 24px;
+}
+
+.resource-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  padding: 30px 32px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.resource-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.resource-type {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.resource-card h2 {
+  margin: 0;
+  font-size: 26px;
+  color: #0f172a;
+}
+
+.resource-card-header span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.resource-card p {
+  color: #64748b;
+  line-height: 1.6;
+  max-width: 820px;
+}

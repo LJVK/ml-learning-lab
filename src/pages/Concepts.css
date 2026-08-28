@@ -1,0 +1,65 @@
+.concepts-page {
+  max-width: 1100px;
+}
+
+.page-header {
+  margin-bottom: 36px;
+}
+
+.page-header h1 {
+  max-width: 760px;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin: 0;
+  color: #0f172a;
+}
+
+.page-header p:not(.eyebrow) {
+  max-width: 720px;
+  margin-top: 18px;
+  color: #475569;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.concept-group-list {
+  display: grid;
+  gap: 24px;
+}
+
+.concept-group-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.concept-group-card h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.concept-group-card p {
+  color: #64748b;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.topic-list span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 700;
+  font-size: 14px;
+}
