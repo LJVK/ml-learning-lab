@@ -48,18 +48,129 @@
   max-width: 760px;
 }
 
-.topic-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+.concept-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
   margin-top: 24px;
 }
 
-.topic-list span {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  font-weight: 700;
+.concept-topic-card {
+  display: block;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.concept-topic-card:hover {
+  transform: translateY(-3px);
+  border-color: #bfdbfe;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+.concept-topic-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: #0f172a;
+}
+
+.concept-topic-card p {
+  margin: 0;
+  color: #64748b;
   font-size: 14px;
+  line-height: 1.55;
+}
+
+@media (max-width: 800px) {
+  .concept-topic-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.concept-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.group-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.group-progress span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.concept-topic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.concept-topic-header span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 900;
+}
+
+.concept-topic-card.completed {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.concept-topic-card.completed h3 {
+  color: #166534;
+}
+
+@media (max-width: 800px) {
+  .concept-group-header {
+    flex-direction: column;
+  }
+
+  .group-progress {
+    align-items: flex-start;
+  }
+}
+
+.group-status {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.group-status.not-started {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.group-status.in-progress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.group-status.completed {
+  background: #dcfce7;
+  color: #166534;
 }

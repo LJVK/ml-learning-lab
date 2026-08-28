@@ -1,32 +1,7 @@
+import { Link } from "react-router-dom";
+import { conceptGroups } from "../data/concepts";
+import { getGroupProgress, isConceptCompleted } from "../utils/progress";
 import "./Concepts.css";
-
-const conceptGroups = [
-  {
-    title: "Attention Family",
-    description: "Core attention mechanisms used in Transformers and generative AI systems.",
-    topics: [
-      "Self-Attention",
-      "Multi-Head Attention",
-      "Cross Attention",
-      "Attention Internals",
-      "Masks",
-      "Encoder vs Decoder Attention",
-      "Positional Information",
-    ],
-  },
-  {
-    title: "Transformer Block Family",
-    description: "The building blocks that make modern Transformer architectures trainable and scalable.",
-    topics: [
-      "Residual Connections",
-      "LayerNorm",
-      "Pre-LN vs Post-LN",
-      "FFN / MLP",
-      "Full Transformer Block",
-      "Stacking Transformer Blocks",
-    ],
-  },
-];
 
 function Concepts() {
   return (
@@ -41,18 +16,54 @@ function Concepts() {
       </div>
 
       <div className="concept-group-list">
-        {conceptGroups.map((group) => (
-          <article className="concept-group-card" key={group.title}>
-            <h2>{group.title}</h2>
-            <p>{group.description}</p>
+        {conceptGroups.map((group) => {
+          const progress = getGroupProgress(group);
 
-            <div className="topic-list">
-              {group.topics.map((topic) => (
-                <span key={topic}>{topic}</span>
-              ))}
-            </div>
-          </article>
-        ))}
+          return (
+            <article className="concept-group-card" key={group.id}>
+              <div className="concept-group-header">
+                <div>
+                  <h2>{group.title}</h2>
+                  <p>{group.description}</p>
+                </div>
+
+                <div className="group-progress">
+                  <span>
+                    {progress.completedCount} / {progress.totalCount} complete
+                  </span>
+
+                  <strong className={`group-status ${progress.status.toLowerCase().replaceAll(" ", "-")}`}>
+                    {progress.status}
+                    {progress.isCompleted ? " ✓" : ""}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="concept-topic-grid">
+                {group.topics.map((topic) => {
+                  const completed = isConceptCompleted(topic.id);
+
+                  return (
+                    <Link
+                      to={`/concepts/${topic.id}`}
+                      className={`concept-topic-card ${
+                        completed ? "completed" : ""
+                      }`}
+                      key={topic.id}
+                    >
+                      <div className="concept-topic-header">
+                        <h3>{topic.title}</h3>
+                        {completed && <span>✓</span>}
+                      </div>
+
+                      <p>{topic.summary}</p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
