@@ -13,19 +13,17 @@ for (const group of conceptGroups) {
   }
 }
 
-function RelatedConceptCard({ conceptId }) {
+function RelatedConceptChip({ conceptId }) {
   const topic = TOPIC_BY_ID[conceptId];
   if (!topic) return null;   // stale mapping — skip silently
 
   return (
     <Link
       to={`/concepts/${topic.id}`}
-      className="continue-learning-card"
+      className="continue-learning-chip"
+      title={topic.summary}
     >
-      <p className="continue-learning-card-group">{topic.groupTitle}</p>
-      <h4>{topic.title}</h4>
-      <p className="continue-learning-card-summary">{topic.summary}</p>
-      <span className="continue-learning-card-cta">Open →</span>
+      {topic.title}
     </Link>
   );
 }
@@ -73,17 +71,8 @@ function ContinueLearning({ conceptId }) {
         <h2>Where to go from here</h2>
       </div>
 
-      {relatedConceptIds.length > 0 && (
-        <div className="continue-learning-block">
-          <h3>Related concepts</h3>
-          <div className="continue-learning-grid">
-            {relatedConceptIds.map((id) => (
-              <RelatedConceptCard key={id} conceptId={id} />
-            ))}
-          </div>
-        </div>
-      )}
-
+      {/* Code / Questions / Resources earn the big-card treatment because
+          they are the actual learning artifacts. Rendered first. */}
       {(codeIds.length > 0 ||
         questionIds.length > 0 ||
         resourceIds.length > 0) && (
@@ -99,6 +88,21 @@ function ContinueLearning({ conceptId }) {
             {resourceIds.length > 0 && (
               <ComingSoonRow label="Resources" count={resourceIds.length} />
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Related concepts trail as a compact chip row — captures relationships
+          the sidebar's family grouping cannot (e.g. self-attention pairs with
+          positional-information), without competing for attention with the
+          learning artifacts above. */}
+      {relatedConceptIds.length > 0 && (
+        <div className="continue-learning-block">
+          <h3>Related concepts</h3>
+          <div className="continue-learning-chip-row">
+            {relatedConceptIds.map((id) => (
+              <RelatedConceptChip key={id} conceptId={id} />
+            ))}
           </div>
         </div>
       )}
