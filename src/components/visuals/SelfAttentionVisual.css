@@ -1,0 +1,179 @@
+.sa-visual-card {
+  margin-top: 32px;
+  padding: 34px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(244, 114, 182, 0.28), transparent 34%),
+    radial-gradient(circle at 85% 15%, rgba(34, 211, 238, 0.24), transparent 34%),
+    radial-gradient(circle at 50% 90%, rgba(250, 204, 21, 0.16), transparent 40%),
+    linear-gradient(135deg, #020617, #0f172a 55%, #111827);
+  color: #f8fafc;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+}
+
+.sa-visual-header {
+  margin-bottom: 24px;
+}
+
+.sa-eyebrow {
+  margin: 0 0 8px;
+  color: #93c5fd;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.sa-visual-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 30px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.sa-visual-header p:not(.sa-eyebrow) {
+  margin: 14px 0 0;
+  color: #cbd5e1;
+  line-height: 1.65;
+  font-size: 15.5px;
+  text-wrap: pretty;
+}
+
+/* Symbol legend row — same pattern as MHA for consistency */
+.sa-defs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.sa-defs > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(147, 197, 253, 0.25);
+}
+
+.sa-defs dt {
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: rgba(37, 99, 235, 0.35);
+  color: #dbeafe;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.sa-defs dd {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sa-diagram-wrap {
+  width: 100%;
+  margin: 8px 0 20px;
+}
+
+.sa-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Animations ─────────────────────────────────────────────────────────────
+   Kept lighter than MHA: the matrix cells are the content, so we only
+   pulse the softmax-arrow and the weighted-mix row highlights. */
+@keyframes sa-arrow-flow {
+  0%, 100% { stroke-opacity: 0.55; }
+  50%      { stroke-opacity: 1;    }
+}
+
+.sa-diagram line[marker-end="url(#sa-arrow)"] {
+  animation: sa-arrow-flow 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sa-diagram line[marker-end="url(#sa-arrow)"] {
+    animation: none;
+  }
+}
+
+.sa-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 4px 0 22px;
+}
+
+.sa-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #e2e8f0;
+}
+
+.sa-legend-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.sa-legend-item.q {
+  color: #f9a8d4;
+  border-color: rgba(244, 114, 182, 0.55);
+}
+
+.sa-legend-item.k {
+  color: #67e8f9;
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.sa-legend-item.v {
+  color: #fde68a;
+  border-color: rgba(250, 204, 21, 0.55);
+}
+
+.sa-bottom-note {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.14);
+  color: #dbeafe;
+  line-height: 1.6;
+}
+
+.sa-bottom-note strong {
+  color: #ffffff;
+}
+
+@media (max-width: 800px) {
+  .sa-visual-card {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .sa-visual-header h2 {
+    font-size: 24px;
+  }
+}

@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
+import ConceptArchitectureDiagram from "../components/ConceptArchitectureDiagram";
+import MultiHeadAttentionVisual from "../components/visuals/MultiHeadAttentionVisual";
+import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
 import { conceptGroups } from "../data/concepts";
 import {
   isConceptCompleted,
   markConceptCompleted,
 } from "../utils/progress";
 import "./ConceptDetail.css";
+
 
 function findTopic(conceptId) {
   for (const group of conceptGroups) {
@@ -22,12 +27,49 @@ function findTopic(conceptId) {
   return null;
 }
 
+function getActiveArchitectureNode(conceptId) {
+  const nodeMap = {
+    "self-attention": "attention",
+    "multi-head-attention": "attention",
+    "cross-attention": "attention",
+    "attention-internals": "attention",
+    masks: "attention",
+    "encoder-vs-decoder-attention": "attention",
+    "positional-information": "input",
+
+    "residual-connections": "residual-1",
+    layernorm: "layernorm-1",
+    "pre-ln-vs-post-ln": "layernorm-1",
+    "ffn-mlp": "ffn",
+    "full-transformer-block": "attention",
+    "stacking-transformer-blocks": "output",
+  };
+
+  return nodeMap[conceptId] || "attention";
+}
+
 function DetailCard({ title, children, variant = "default" }) {
   return (
     <article className={`detail-card ${variant}`}>
       <h2>{title}</h2>
       {children}
     </article>
+  );
+}
+
+function ConceptVisual({ conceptId }) {
+  if (conceptId === "multi-head-attention") {
+    return <MultiHeadAttentionVisual />;
+  }
+
+  if (conceptId === "self-attention") {
+    return <SelfAttentionVisual />;
+  }
+
+  return (
+    <ConceptArchitectureDiagram
+      activeNode={getActiveArchitectureNode(conceptId)}
+    />
   );
 }
 
@@ -52,30 +94,31 @@ function ConceptDetail() {
   const [completed, setCompleted] = useState(isConceptCompleted(topic.id));
 
   useEffect(() => {
-  window.scrollTo(0, 0);
-}, [topic.id]);
+    window.scrollTo(0, 0);
+    setCompleted(isConceptCompleted(topic.id));
+  }, [topic.id]);
 
   useEffect(() => {
     function handleScroll() {
-        const scrollTop = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
 
-        const scrollPercent = (scrollTop + windowHeight) / documentHeight;
+      const scrollPercent = (scrollTop + windowHeight) / documentHeight;
 
-        if (scrollPercent >= 0.9) {
-            markConceptCompleted(topic.id);
-            setCompleted(true);
-        }
+      if (scrollPercent >= 0.9) {
+        markConceptCompleted(topic.id);
+        setCompleted(true);
+      }
     }
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
 
     return () => {
-        window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-}, [topic.id]);
+  }, [topic.id]);
 
   return (
     <section className="concept-detail-page">
@@ -86,7 +129,10 @@ function ConceptDetail() {
       <p className="eyebrow">{groupTitle}</p>
       <h1>{topic.title}</h1>
       <p className="concept-summary">{topic.summary}</p>
+
       {completed && <div className="completed-banner">Completed ✓</div>}
+
+      <ConceptVisual conceptId={topic.id} />
 
       {details ? (
         <>
@@ -114,9 +160,9 @@ function ConceptDetail() {
 
           <DetailCard title="Shape flow" variant="code">
             <div className="shape-flow-list">
-            {details.shapeFlow.map((item) => (
-            <div key={item}>{item}</div>
-            ))}
+              {details.shapeFlow.map((item) => (
+                <div key={item}>{item}</div>
+              ))}
             </div>
           </DetailCard>
 
