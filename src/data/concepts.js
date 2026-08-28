@@ -52,6 +52,33 @@ export const conceptGroups = [
       "Attention output is a weighted mixture of value vectors.",
       "Self-attention preserves shape: (B, T, D) in and (B, T, D) out.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "In self-attention, what does the attention weight between token i and token j actually control?",
+      options: [
+        {
+          text:
+            "How much of token j's value vector is mixed into token i's output.",
+          correct: true,
+          feedback:
+            "Right — attention[i][j] is the scalar coefficient on V[j] when computing output[i]. The output for token i is a weighted sum of every token's V vector.",
+        },
+        {
+          text: "How similar token i and token j are in the input embedding.",
+          correct: false,
+          feedback:
+            "Not quite — similarity is measured on Q and K projections, not on the raw input embeddings. Two tokens with similar embeddings can produce very different Q/K vectors.",
+        },
+        {
+          text:
+            "Whether token i is allowed to attend to token j (a binary decision).",
+          correct: false,
+          feedback:
+            "That is what a mask does, not what the attention weight does. The weight is a continuous value in [0, 1] after softmax; masks are applied earlier by adding -infinity to blocked scores.",
+        },
+      ],
+    },
   },
 },
       {
@@ -104,6 +131,31 @@ export const conceptGroups = [
       "All heads attend over the full sequence.",
       "The final output preserves shape: (B, T, D).",
     ],
+
+    recallQuestion: {
+      prompt:
+        "A model has embedding dim D = 512 and H = 8 heads. What is the per-head dimension D_h that each attention head operates on?",
+      options: [
+        {
+          text: "64 — the model dimension D is split evenly across heads: D_h = D / H.",
+          correct: true,
+          feedback:
+            "Right — D = H · D_h. Each head sees a 64-dim slice of every token vector. Total compute stays comparable to a single 512-dim head, but the H parallel patterns are the point.",
+        },
+        {
+          text: "512 — every head operates on the full model dimension.",
+          correct: false,
+          feedback:
+            "That would be 8 heads each doing single-head attention at full dim, costing 8× the compute. Multi-head attention splits the dim so total work stays similar to single-head.",
+        },
+        {
+          text: "4096 — heads concatenate first, then attention is computed once.",
+          correct: false,
+          feedback:
+            "Heads run in parallel, not concatenated first. Concatenation happens at the end (B, H, T, D_h) → (B, T, D), followed by the output projection.",
+        },
+      ],
+    },
   },
 },
       {
@@ -158,6 +210,31 @@ export const conceptGroups = [
       "K controls matching; V carries the information being passed.",
       "In text-to-image diffusion, image/latent tokens usually query text tokens.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "A decoder processes a target sequence of length 10 tokens by cross-attending to an encoder output of length 50 tokens. What is the shape of the cross-attention score matrix Q · Kᵀ (ignoring batch and heads)?",
+      options: [
+        {
+          text: "10 × 50 — one row per target query, one column per source key.",
+          correct: true,
+          feedback:
+            "Right — the matrix is rectangular. Rows index the target (query) sequence; columns index the source (key/value) sequence. Softmax runs across columns so each target row sums to 1.",
+        },
+        {
+          text: "50 × 10 — one row per source, one column per target.",
+          correct: false,
+          feedback:
+            "Rows come from the query side, not the key side. Q · Kᵀ has query-length rows because we're computing 'how much does each query attend to each key'.",
+        },
+        {
+          text: "60 × 60 — cross-attention concatenates source and target first.",
+          correct: false,
+          feedback:
+            "Cross-attention keeps the two sequences separate. Concatenating source + target and running self-attention on the combined sequence is a different mechanism (sometimes called prefix or joint attention).",
+        },
+      ],
+    },
   },
 },
       {

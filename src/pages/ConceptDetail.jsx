@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 import ConceptArchitectureDiagram from "../components/ConceptArchitectureDiagram";
 import ContinueLearning from "../components/ContinueLearning";
+import UnderstandingCheck from "../components/UnderstandingCheck";
 import MultiHeadAttentionVisual from "../components/visuals/MultiHeadAttentionVisual";
 import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
 import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
@@ -104,27 +105,13 @@ function ConceptDetail() {
     setCompleted(isConceptCompleted(topic.id));
   }, [topic.id]);
 
-  useEffect(() => {
-    function handleScroll() {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-
-      const scrollPercent = (scrollTop + windowHeight) / documentHeight;
-
-      if (scrollPercent >= 0.9) {
-        markConceptCompleted(topic.id);
-        setCompleted(true);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [topic.id]);
+  // Completion is now triggered explicitly by UnderstandingCheck instead of
+  // scroll depth. Scroll-to-90% was a "read receipt", not a learning signal;
+  // an answered recall question + confirm click is the real signal.
+  function handleMarkComplete() {
+    markConceptCompleted(topic.id);
+    setCompleted(true);
+  }
 
   return (
     <section className="concept-detail-page">
@@ -199,6 +186,13 @@ function ConceptDetail() {
           </p>
         </DetailCard>
       )}
+
+      <UnderstandingCheck
+        conceptId={topic.id}
+        recallQuestion={details?.recallQuestion}
+        isCompleted={completed}
+        onMarkComplete={handleMarkComplete}
+      />
 
       <ContinueLearning conceptId={topic.id} />
     </section>
