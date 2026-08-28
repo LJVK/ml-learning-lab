@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import ConceptArchitectureDiagram from "../components/ConceptArchitectureDiagram";
 import MultiHeadAttentionVisual from "../components/visuals/MultiHeadAttentionVisual";
 import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
+import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
 import { conceptGroups } from "../data/concepts";
 import {
   isConceptCompleted,
@@ -64,6 +65,10 @@ function ConceptVisual({ conceptId }) {
 
   if (conceptId === "self-attention") {
     return <SelfAttentionVisual />;
+  }
+
+  if (conceptId === "cross-attention") {
+    return <CrossAttentionVisual />;
   }
 
   return (

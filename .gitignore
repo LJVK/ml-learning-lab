@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local docs / reference assets — not part of the site
+ML_Learning_Lab_Handoff.md
+Sample Flow Diagram.png
