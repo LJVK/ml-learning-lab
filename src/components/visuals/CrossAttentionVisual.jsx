@@ -6,7 +6,7 @@ const NS = SOURCE.length;
 const NT = TARGET.length;
 
 // ── Layout constants (SVG user units) ─────────────────────────────────────
-const V = { w: 1000, h: 1320 };
+const V = { w: 1000, h: 1080 };
 
 // Row 1: SOURCE tokens (top-left half)
 const SRC_Y = 60;
@@ -18,7 +18,11 @@ const SRC_TOKEN_CENTERS = [130, 260, 390, 520];
 const TGT_Y = 60;
 const TGT_TOKEN_W = 110;
 const TGT_TOKEN_H = 42;
-const TGT_TOKEN_CENTERS = [700, 830, 960];
+const TGT_TOKEN_CENTERS = [660, 790, 920];
+
+// Divider between source/target halves — placed midway between last source
+// (x=520+50=570) and first target (x=660-55=605), so it never crosses tokens.
+const DIVIDER_X = 588;
 
 // Row 3: K / V (from source) and Q (from target) projection stacks
 const QKV_Y = 220;
@@ -39,16 +43,17 @@ const MATRIX_W = MATRIX_CELL * NS;   // 208
 const MATRIX_H = MATRIX_CELL * NT;   // 156
 const MATRIX_X = 130;
 
-// Softmax matrix on the right
-const SOFTMAX_X = MATRIX_X + MATRIX_W + 220;
+// Softmax matrix on the right — gap must fit a centered arrow AND clear the
+// softmax row labels ("silencieux" ≈ 65px wide, extending left of SOFTMAX_X).
+const SOFTMAX_X = MATRIX_X + MATRIX_W + 260;
 
 // Row 5: weighted-mix band
-const MIX_Y = MATRIX_Y + MATRIX_H + 100;
+const MIX_Y = MATRIX_Y + MATRIX_H + 90;
 const MIX_ROW_H = 40;
 const MIX_ROW_GAP = 12;
 
-// Row 6: output target tokens
-const OUTPUT_Y = MIX_Y + NT * (MIX_ROW_H + MIX_ROW_GAP) - MIX_ROW_GAP + 60;
+// Row 6: output target tokens (tight to end of mix band; no dead space below)
+const OUTPUT_Y = MIX_Y + NT * (MIX_ROW_H + MIX_ROW_GAP) - MIX_ROW_GAP + 44;
 
 // Palette — source is cool (blue/cyan), target is warm (pink/orange)
 const C = {
@@ -264,8 +269,16 @@ function Matrix({ x, y, mode, title, subtitle, rows, cols, data }) {
 
 function CrossAttentionVisual() {
   const matrixMidY = MATRIX_Y + MATRIX_H / 2;
-  const arrowX1 = MATRIX_X + MATRIX_W + 12;
-  const arrowX2 = SOFTMAX_X - 12;
+  // Center the arrow on the true midpoint between the two matrices' cell
+  // regions (not on the "safe" sub-range biased by row labels). Softmax row
+  // labels extend ~70px left of SOFTMAX_X — we've widened the gap so that
+  // fits alongside a centered arrow.
+  const gapLeft = MATRIX_X + MATRIX_W;      // 338
+  const gapRight = SOFTMAX_X;               // 598
+  const gapMid = (gapLeft + gapRight) / 2;  // 468
+  const arrowHalf = 48;
+  const arrowX1 = gapMid - arrowHalf;       // 420
+  const arrowX2 = gapMid + arrowHalf;       // 516 — clears "silencieux" (~ x=528)
 
   return (
     <section className="ca-visual-card">
@@ -356,9 +369,9 @@ function CrossAttentionVisual() {
 
           {/* Divider line between source-half and target-half at the top */}
           <line
-            x1={620}
+            x1={DIVIDER_X}
             y1={20}
-            x2={620}
+            x2={DIVIDER_X}
             y2={QKV_Y - 40}
             stroke="rgba(148,163,184,0.25)"
             strokeWidth="1"
@@ -523,13 +536,13 @@ function CrossAttentionVisual() {
               strokeLinecap="round"
               markerEnd="url(#ca-arrow)"
             />
-            <g transform={`translate(${(arrowX1 + arrowX2) / 2}, ${matrixMidY - 22})`}>
+            <g transform={`translate(${gapMid}, ${matrixMidY - 26})`}>
               <rect
-                x={-56}
-                y={-14}
-                width={112}
-                height={28}
-                rx={14}
+                x={-78}
+                y={-16}
+                width={156}
+                height={32}
+                rx={16}
                 fill="rgba(15,23,42,0.85)"
                 stroke="rgba(147,197,253,0.5)"
               />
@@ -538,7 +551,7 @@ function CrossAttentionVisual() {
                 y={5}
                 textAnchor="middle"
                 fill="#e2e8f0"
-                fontSize="11"
+                fontSize="12"
                 fontWeight="800"
                 fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
               >
@@ -546,8 +559,8 @@ function CrossAttentionVisual() {
               </text>
             </g>
             <text
-              x={(arrowX1 + arrowX2) / 2}
-              y={matrixMidY + 30}
+              x={gapMid}
+              y={MATRIX_Y + MATRIX_H + 20}
               textAnchor="middle"
               fill="#94a3b8"
               fontSize="10"

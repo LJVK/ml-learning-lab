@@ -430,13 +430,13 @@ function SelfAttentionVisual() {
             >
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#93c5fd" />
             </marker>
-            <g transform={`translate(${(arrowX1 + arrowX2) / 2}, ${matrixMidY - 22})`}>
+            <g transform={`translate(${(arrowX1 + arrowX2) / 2}, ${matrixMidY - 26})`}>
               <rect
-                x={-56}
-                y={-14}
-                width={112}
-                height={28}
-                rx={14}
+                x={-78}
+                y={-16}
+                width={156}
+                height={32}
+                rx={16}
                 fill="rgba(15,23,42,0.85)"
                 stroke="rgba(147,197,253,0.5)"
               />
@@ -445,7 +445,7 @@ function SelfAttentionVisual() {
                 y={5}
                 textAnchor="middle"
                 fill="#e2e8f0"
-                fontSize="11"
+                fontSize="12"
                 fontWeight="800"
                 fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
               >
