@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import ConceptArchitectureDiagram from "../components/ConceptArchitectureDiagram";
+import ContinueLearning from "../components/ContinueLearning";
 import MultiHeadAttentionVisual from "../components/visuals/MultiHeadAttentionVisual";
 import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
 import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
@@ -198,6 +199,8 @@ function ConceptDetail() {
           </p>
         </DetailCard>
       )}
+
+      <ContinueLearning conceptId={topic.id} />
     </section>
   );
 }
