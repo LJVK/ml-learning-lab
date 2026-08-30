@@ -26,3 +26,9 @@ dist-ssr
 # Local docs / reference assets — not part of the site
 ML_Learning_Lab_Handoff.md
 Sample Flow Diagram.png
+ML_Learning_Lab_Concept_MD_Files.zip
+
+# Local content-extraction tooling — ml_learning_lab_content/ is committed,
+# but the extraction scripts stay local so the repo does not depend on
+# private DOCX source files.
+scripts/
