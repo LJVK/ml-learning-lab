@@ -286,6 +286,34 @@ export const conceptGroups = [
       "Heads specialize because they have separate learned projections.",
       "Attention maps are useful clues, but not proof of causality.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "You inspect a model and find that token 'it' has a 0.82 attention weight on token 'dog'. What is the safest conclusion you can draw from this alone?",
+      options: [
+        {
+          text:
+            "The 0.82 weight is a correlation — you cannot conclude causal importance without an intervention like ablating 'dog' and measuring the output change.",
+          correct: true,
+          feedback:
+            "Right — this is the interpretability trap. High attention weight only shows that Q_it · K_dog is large; it does not prove the model actually relied on V_dog for its output. Ablation, replacement, or corruption is what turns a correlation into evidence of causal importance.",
+        },
+        {
+          text:
+            "The model has learned coreference and is resolving 'it' to refer to 'dog'.",
+          correct: false,
+          feedback:
+            "Attention maps are suggestive, not conclusive. The model could be picking up a positional shortcut, an artifact of the training distribution, or a dead-head-style pattern. Without an intervention test, coreference is just one plausible story among many.",
+        },
+        {
+          text:
+            "The head is specialized for pronoun resolution because heads are manually assigned roles.",
+          correct: false,
+          feedback:
+            "Heads are not manually assigned. Specialization emerges from training on the loss; you can only name a head's role by observing its behavior across many inputs — and even then, it is a summary, not a specification.",
+        },
+      ],
+    },
   },
 },
       {
