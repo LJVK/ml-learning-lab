@@ -9,6 +9,7 @@ import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
 import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
 import MasksVisual from "../components/visuals/MasksVisual";
 import PositionalInformationVisual from "../components/visuals/PositionalInformationVisual";
+import EncoderDecoderAttentionVisual from "../components/visuals/EncoderDecoderAttentionVisual";
 import { conceptGroups } from "../data/concepts";
 import {
   isConceptCompleted,
@@ -81,6 +82,10 @@ function ConceptVisual({ conceptId }) {
 
   if (conceptId === "positional-information") {
     return <PositionalInformationVisual />;
+  }
+
+  if (conceptId === "encoder-vs-decoder-attention") {
+    return <EncoderDecoderAttentionVisual />;
   }
 
   return (
