@@ -28,17 +28,22 @@ function RelatedConceptChip({ conceptId }) {
   );
 }
 
-// Placeholder for future Code / Questions / Resources sections. Kept
-// separate from RelatedConceptCard so those sections can grow independently
-// once real data lands.
-function ComingSoonRow({ label, count }) {
+// Artifact card — a big, prominent tile that lets the user jump straight
+// into the code / questions / cheatsheet for THIS concept. This is the
+// "learning-artifact" real estate that earned the top of the Continue
+// Learning block.
+function ArtifactCard({ kind, label, description, to, icon }) {
   return (
-    <div className="continue-learning-stub">
-      <span className="continue-learning-stub-label">{label}</span>
-      <span className="continue-learning-stub-count">
-        {count} planned · content coming soon
-      </span>
-    </div>
+    <Link to={to} className={`continue-learning-artifact ${kind}`}>
+      <div className="continue-learning-artifact-icon" aria-hidden="true">
+        {icon}
+      </div>
+      <div className="continue-learning-artifact-text">
+        <h4>{label}</h4>
+        <p>{description}</p>
+      </div>
+      <span className="continue-learning-artifact-cta">Open →</span>
+    </Link>
   );
 }
 
@@ -56,13 +61,16 @@ function ContinueLearning({ conceptId }) {
     resourceIds = [],
   } = unit;
 
-  const hasAnything =
-    relatedConceptIds.length > 0 ||
-    codeIds.length > 0 ||
-    questionIds.length > 0 ||
-    resourceIds.length > 0;
+  // For each kind, we currently point at the first id in the array. The
+  // arrays keep the plural shape so a concept can eventually own multiple
+  // artifacts of the same type (e.g. two independent code implementations).
+  const codeId = codeIds[0];
+  const questionId = questionIds[0];
+  const cheatsheetId = resourceIds[0];
 
-  if (!hasAnything) return null;
+  const hasArtifacts = Boolean(codeId || questionId || cheatsheetId);
+  const hasRelated = relatedConceptIds.length > 0;
+  if (!hasArtifacts && !hasRelated) return null;
 
   return (
     <section className="continue-learning">
@@ -71,22 +79,37 @@ function ContinueLearning({ conceptId }) {
         <h2>Where to go from here</h2>
       </div>
 
-      {/* Code / Questions / Resources earn the big-card treatment because
-          they are the actual learning artifacts. Rendered first. */}
-      {(codeIds.length > 0 ||
-        questionIds.length > 0 ||
-        resourceIds.length > 0) && (
+      {/* Code / Questions / Cheatsheet artifacts — top real estate. */}
+      {hasArtifacts && (
         <div className="continue-learning-block">
           <h3>More on this topic</h3>
-          <div className="continue-learning-stub-list">
-            {codeIds.length > 0 && (
-              <ComingSoonRow label="Code" count={codeIds.length} />
+          <div className="continue-learning-artifact-grid">
+            {cheatsheetId && (
+              <ArtifactCard
+                kind="cheatsheet"
+                label="Cheat sheet"
+                description="Dense revision page: math, shape flow, common mistakes, 30-second recall."
+                to={`/cheatsheets/${cheatsheetId}`}
+                icon="⚡"
+              />
             )}
-            {questionIds.length > 0 && (
-              <ComingSoonRow label="Questions" count={questionIds.length} />
+            {questionId && (
+              <ArtifactCard
+                kind="questions"
+                label="Question bank"
+                description="Senior-level interview questions with concise ideal answers."
+                to={`/questions/${questionId}`}
+                icon="?"
+              />
             )}
-            {resourceIds.length > 0 && (
-              <ComingSoonRow label="Resources" count={resourceIds.length} />
+            {codeId && (
+              <ArtifactCard
+                kind="code"
+                label="Code"
+                description="From-scratch implementation with inline shape comments."
+                to={`/code/${codeId}`}
+                icon="{ }"
+              />
             )}
           </div>
         </div>
@@ -96,7 +119,7 @@ function ContinueLearning({ conceptId }) {
           the sidebar's family grouping cannot (e.g. self-attention pairs with
           positional-information), without competing for attention with the
           learning artifacts above. */}
-      {relatedConceptIds.length > 0 && (
+      {hasRelated && (
         <div className="continue-learning-block">
           <h3>Related concepts</h3>
           <div className="continue-learning-chip-row">

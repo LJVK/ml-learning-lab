@@ -9,6 +9,7 @@ import Code from "./pages/Code";
 import Questions from "./pages/Questions";
 import Roadmap from "./pages/Roadmap";
 import Resources from "./pages/Resources";
+import { CodePage, QuestionsPage, CheatsheetPage } from "./pages/ArtifactPage";
 
 function App() {
   return (
@@ -19,7 +20,10 @@ function App() {
           <Route path="concepts" element={<Concepts />} />
           <Route path="concepts/:conceptId" element={<ConceptDetail />} />
           <Route path="code" element={<Code />} />
+          <Route path="code/:conceptId" element={<CodePage />} />
           <Route path="questions" element={<Questions />} />
+          <Route path="questions/:conceptId" element={<QuestionsPage />} />
+          <Route path="cheatsheets/:conceptId" element={<CheatsheetPage />} />
           <Route path="roadmap" element={<Roadmap />} />
           <Route path="resources" element={<Resources />} />
         </Route>

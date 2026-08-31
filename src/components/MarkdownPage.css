@@ -1,0 +1,219 @@
+/* MarkdownPage — shared styles for /code /questions /cheatsheets routes.
+   Light content palette, generous typography, print-friendly. */
+
+.md-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.md-page-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.md-page-back {
+  display: inline-block;
+  color: #2563eb;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.md-page-back:hover {
+  text-decoration: underline;
+}
+
+.md-page-back.muted {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.md-page-eyebrow {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.md-page-eyebrow span {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.md-page-title {
+  margin: 0 0 32px;
+  color: #0f172a;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* ── Markdown body typography ────────────────────────────────────────── */
+
+.md-page-body {
+  color: #1e293b;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.md-page-body > blockquote {
+  margin: 0 0 24px;
+  padding: 14px 20px;
+  border-left: 4px solid #2563eb;
+  background: #eff6ff;
+  border-radius: 0 12px 12px 0;
+  color: #1e40af;
+  font-size: 17px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.md-page-body h2 {
+  margin: 40px 0 16px;
+  padding-top: 4px;
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.md-page-body h3 {
+  margin: 28px 0 10px;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.md-page-body h4 {
+  margin: 20px 0 8px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.md-page-body p {
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.md-page-body strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.md-page-body ul,
+.md-page-body ol {
+  margin: 0 0 20px;
+  padding-left: 22px;
+}
+
+.md-page-body li {
+  margin: 6px 0;
+  line-height: 1.65;
+}
+
+.md-page-body li > p {
+  margin: 0 0 6px;
+}
+
+/* Inline code — subtle */
+.md-page-body :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+/* Fenced code blocks — dark, monospaced, syntax highlighted */
+.md-page-body pre {
+  margin: 20px 0;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.md-page-body pre code {
+  background: transparent !important;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Tables */
+.md-page-body table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 14.5px;
+}
+
+.md-page-body th,
+.md-page-body td {
+  padding: 10px 14px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.md-page-body th {
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 13.5px;
+}
+
+.md-page-body tbody tr:nth-child(even) td {
+  background: #fafcff;
+}
+
+/* Blockquote inside body sections (rare) */
+.md-page-body :not(:first-child) > blockquote {
+  margin: 20px 0;
+  padding: 12px 16px;
+  border-left: 3px solid #93c5fd;
+  background: #f1f5f9;
+  color: #334155;
+  font-style: normal;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Missing content fallback */
+.md-page-missing {
+  padding: 40px;
+  border-radius: 20px;
+  background: #fef2f2;
+  border: 1px dashed #ef4444;
+  text-align: center;
+  color: #7f1d1d;
+}
+
+.md-page-missing h2 {
+  margin: 0 0 8px;
+  color: #7f1d1d;
+}
+
+@media (max-width: 700px) {
+  .md-page-title {
+    font-size: 32px;
+  }
+
+  .md-page-body {
+    font-size: 15px;
+  }
+}
