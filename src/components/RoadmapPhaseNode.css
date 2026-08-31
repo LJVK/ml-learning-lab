@@ -1,0 +1,165 @@
+/* Roadmap phase node — one card in the dependency graph. Matches the
+   site's light content palette so the graph feels like part of the page,
+   not an embedded visualization. */
+
+.roadmap-node {
+  /* Fixed dimensions when collapsed so straight edges between same-row
+     phases land cleanly at the handle centers. Height grows only on
+     expand to fit topic chips. */
+  width: 320px;
+  min-height: 200px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1.5px solid rgba(226, 232, 240, 0.9);
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.roadmap-node:hover {
+  transform: translateY(-1px);
+}
+
+.roadmap-node-handle {
+  width: 8px;
+  height: 8px;
+  background: #cbd5e1;
+  border: 2px solid #ffffff;
+  opacity: 0.6;
+}
+
+.roadmap-node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.roadmap-node-header:hover .roadmap-node-header-text h3 {
+  color: #2563eb;
+}
+
+.roadmap-node-header-text {
+  min-width: 0;
+}
+
+.roadmap-node-phase {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.roadmap-node-header-text h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-wrap: balance;
+  transition: color 120ms ease;
+}
+
+.roadmap-node-status {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.roadmap-node-summary {
+  margin: 12px 0 0;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.roadmap-node-topics {
+  margin-top: 14px;
+}
+
+.roadmap-node-topics.collapsed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.roadmap-node-topics-toggle {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+.roadmap-node-topics.expanded {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.roadmap-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.roadmap-topic-chip.linked {
+  color: #1d4ed8;
+  cursor: pointer;
+}
+
+.roadmap-topic-chip.linked:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
+/* Status-specific accents: subtle left border color so nodes read as a
+   completed/next/planned status at a glance even without expanding */
+.roadmap-node-completed {
+  border-left-width: 4px;
+  border-left-color: #22c55e;
+}
+
+.roadmap-node-next {
+  border-left-width: 4px;
+  border-left-color: #fb923c;
+}
+
+.roadmap-node-planned {
+  border-left-width: 4px;
+  border-left-color: #94a3b8;
+}

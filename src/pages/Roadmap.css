@@ -1,61 +1,82 @@
 .roadmap-page {
-  max-width: 1100px;
+  max-width: 1400px;
 }
 
-.roadmap-list {
-  display: grid;
-  gap: 22px;
+/* Canvas hosts the React Flow graph. Fixed height so the graph has room
+   to render; React Flow's fitView zooms the layout to fit at any width. */
+.roadmap-canvas {
+  position: relative;
+  height: 900px;
+  margin-top: 24px;
+  border-radius: 24px;
+  background: #f8fafc;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  overflow: hidden;
 }
 
-.roadmap-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 22px;
-  padding: 28px 32px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+.roadmap-canvas .react-flow__attribution {
+  display: none;
 }
 
-.roadmap-card-header {
+.roadmap-legend {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0 0;
 }
 
-.phase {
-  margin: 0 0 8px;
-  color: #2563eb;
-  font-weight: 800;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.roadmap-card h2 {
-  margin: 0;
-  font-size: 26px;
-  color: #0f172a;
-}
-
-.status {
-  padding: 8px 12px;
+.roadmap-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  font-size: 12px;
   font-weight: 800;
-  white-space: nowrap;
+  letter-spacing: 0.06em;
 }
 
-.status.completed {
-  background: #dcfce7;
-  color: #166534;
+.roadmap-legend-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
 }
 
-.status.next {
-  background: #dbeafe;
-  color: #1d4ed8;
+.roadmap-legend-item.completed {
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
-.status.planned {
-  background: #f1f5f9;
+.roadmap-legend-item.completed::before {
+  background: #22c55e;
+}
+
+.roadmap-legend-item.next {
+  color: #c2410c;
+  border-color: rgba(251, 146, 60, 0.55);
+}
+
+.roadmap-legend-item.next::before {
+  background: #fb923c;
+}
+
+.roadmap-legend-item.planned {
   color: #475569;
+  border-color: rgba(148, 163, 184, 0.55);
+}
+
+.roadmap-legend-item.planned::before {
+  background: #94a3b8;
+}
+
+/* Narrow viewports: give the graph more vertical room to compensate for
+   the auto-zoom that shrinks nodes when the width isn't enough. */
+@media (max-width: 900px) {
+  .roadmap-canvas {
+    height: 900px;
+  }
 }
