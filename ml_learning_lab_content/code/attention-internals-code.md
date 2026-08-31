@@ -14,7 +14,3 @@ Attention internals is a lens on the mechanism, not a separate mechanism. The se
 ## No dedicated implementation
 
 See [`src/singleheadselfattention.py`](src/singleheadselfattention.py) for the closest reference implementation. The prose above explains why this concept does not have its own file.
-
-## Where this code lives
-
-This concept does not ship a dedicated module. The referenced file above is the closest reference implementation.

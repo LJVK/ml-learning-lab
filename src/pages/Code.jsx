@@ -1,50 +1,57 @@
+import { Link } from "react-router-dom";
+
+import { conceptGroups } from "../data/concepts";
+import { listContent } from "../utils/content";
 import "./Code.css";
 
-const codeSections = [
-  {
-    title: "Attention From Scratch",
-    description: "Core attention mechanisms implemented step by step in PyTorch.",
-    files: [
-      "singleheadselfattention.py",
-      "multiheadselfattention.py",
-      "crossattention.py",
-    ],
-  },
-  {
-    title: "Transformer Block From Scratch",
-    description: "Reusable Transformer components built on top of attention.",
-    files: [
-      "feed_forward.py",
-      "transformer_block.py",
-      "test_transformer_block.py",
-    ],
-  },
-];
+// Code page — directory of every code file. Groups by concept family so it
+// reads as a curriculum, not a folder listing. Each card links to
+// /code/:conceptId.
 
 function Code() {
+  const available = new Set(listContent("code"));
+
   return (
     <section className="code-page">
       <div className="page-header">
         <p className="eyebrow">Code</p>
         <h1>From-scratch implementations.</h1>
         <p>
-          Clean PyTorch implementations for attention, Transformer blocks, and
-          supporting tests.
+          PyTorch code for every attention and Transformer-block concept, with
+          heavy inline shape comments. Read a file to see the mechanism as
+          runnable code.
         </p>
       </div>
 
-      <div className="code-section-list">
-        {codeSections.map((section) => (
-          <article className="code-card" key={section.title}>
-            <h2>{section.title}</h2>
-            <p>{section.description}</p>
+      <div className="code-groups">
+        {conceptGroups.map((group) => (
+          <section className="code-group" key={group.id}>
+            <div className="code-group-header">
+              <h2>{group.title}</h2>
+              <p>{group.description}</p>
+            </div>
 
-            <ul>
-              {section.files.map((file) => (
-                <li key={file}>{file}</li>
-              ))}
-            </ul>
-          </article>
+            <div className="code-topic-grid">
+              {group.topics
+                .filter((t) => available.has(t.id))
+                .map((topic) => (
+                  <Link
+                    key={topic.id}
+                    to={`/code/${topic.id}`}
+                    className="code-topic-card"
+                  >
+                    <div className="code-topic-icon" aria-hidden="true">
+                      {"{ }"}
+                    </div>
+                    <div className="code-topic-text">
+                      <h3>{topic.title}</h3>
+                      <p>{topic.summary}</p>
+                    </div>
+                    <span className="code-topic-cta">Open →</span>
+                  </Link>
+                ))}
+            </div>
+          </section>
         ))}
       </div>
     </section>

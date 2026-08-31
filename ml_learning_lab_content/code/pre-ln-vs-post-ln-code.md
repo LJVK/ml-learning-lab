@@ -114,7 +114,3 @@ if __name__ == "__main__":
     print("Post-LN out:  mean={:.3f}  std={:.3f}".format(y_post.mean().item(), y_post.std().item()))
     # Post-LN output is normalized; Pre-LN output preserves the growing residual stream.
 ```
-
-## Where this code lives
-
-Source files above are checked in under `ml_learning_lab_content/code/src/` in this repo. They are kept in sync with the original working implementations in `~/My_Repos/attention-from-scracth/` via `scripts/regenerate_code.py`.

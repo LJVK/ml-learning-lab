@@ -74,7 +74,3 @@ class MultiHeadSelfAttention(nn.Module):
 
         assert out.shape == (B, T, D)
 ```
-
-## Where this code lives
-
-Source files above are checked in under `ml_learning_lab_content/code/src/` in this repo. They are kept in sync with the original working implementations in `~/My_Repos/attention-from-scracth/` via `scripts/regenerate_code.py`.

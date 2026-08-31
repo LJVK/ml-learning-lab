@@ -14,7 +14,3 @@ Stacking is trivial once one block is written: instantiate N TransformerBlock mo
 ## No dedicated implementation
 
 See [`src/transformer_block.py`](src/transformer_block.py) for the closest reference implementation. The prose above explains why this concept does not have its own file.
-
-## Where this code lives
-
-This concept does not ship a dedicated module. The referenced file above is the closest reference implementation.

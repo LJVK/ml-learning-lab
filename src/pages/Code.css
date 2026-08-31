@@ -2,43 +2,100 @@
   max-width: 1100px;
 }
 
-.code-section-list {
+.code-groups {
   display: grid;
-  gap: 24px;
+  gap: 40px;
 }
 
-.code-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 22px;
-  padding: 32px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+.code-group-header {
+  margin-bottom: 20px;
 }
 
-.code-card h2 {
+.code-group-header h2 {
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.code-group-header p {
   margin: 0;
-  font-size: 28px;
-  color: #0f172a;
-}
-
-.code-card p {
   color: #64748b;
-  line-height: 1.6;
-}
-
-.code-card ul {
-  margin-top: 20px;
-  padding-left: 0;
-  list-style: none;
-  display: grid;
-  gap: 10px;
-}
-
-.code-card li {
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: #f1f5f9;
-  color: #0f172a;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 14px;
+  line-height: 1.5;
+}
+
+.code-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.code-topic-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.code-topic-card:hover {
+  transform: translateY(-2px);
+  border-color: #93c5fd;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.1);
+}
+
+.code-topic-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #15803d;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.code-topic-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.code-topic-text h3 {
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.code-topic-text p {
+  margin: 0;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.code-topic-cta {
+  align-self: center;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
 }

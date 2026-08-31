@@ -107,7 +107,3 @@ if __name__ == "__main__":
     print(f"Max abs diff vs nn.LayerNorm: {(out_ours - out_theirs).abs().max().item():.2e}")
     # Should be ~1e-7 or smaller. Sanity check passes.
 ```
-
-## Where this code lives
-
-Source files above are checked in under `ml_learning_lab_content/code/src/` in this repo. They are kept in sync with the original working implementations in `~/My_Repos/attention-from-scracth/` via `scripts/regenerate_code.py`.

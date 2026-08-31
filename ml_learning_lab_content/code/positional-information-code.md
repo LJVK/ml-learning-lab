@@ -132,7 +132,3 @@ if __name__ == "__main__":
     print("\nLearned PE, batch 0 position 0 (first 8 dims):")
     print(out_learned[0, 0, :8])
 ```
-
-## Where this code lives
-
-Source files above are checked in under `ml_learning_lab_content/code/src/` in this repo. They are kept in sync with the original working implementations in `~/My_Repos/attention-from-scracth/` via `scripts/regenerate_code.py`.

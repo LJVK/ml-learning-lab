@@ -23,16 +23,24 @@ const RAW_MODULES = {
   ),
 };
 
-// Filenames follow the pattern <concept-id>-<kind>.md (e.g.
-// self-attention-questions.md). Extract the id so callers can look up by
-// concept + kind cleanly.
+// Filenames follow the pattern <concept-id>-<suffix>.md, where the suffix
+// depends on the artifact kind (not always the dir name):
+//   questions/    → <id>-questions.md   (plural, matches dir)
+//   cheatsheets/  → <id>-cheatsheet.md  (singular, unlike dir)
+//   code/         → <id>-code.md        (same)
+const KIND_SUFFIX = {
+  questions: "questions",
+  cheatsheets: "cheatsheet",
+  code: "code",
+};
+
 function stripSuffix(path, kind) {
   // path is like "../../ml_learning_lab_content/questions/self-attention-questions.md"
   const file = path.split("/").pop() || "";
   const bare = file.replace(/\.md$/, "");
-  // strip trailing "-<kind>" or "-<kind>s" (cheatsheets/questions plural in dir)
-  const singular = kind.endsWith("s") ? kind.slice(0, -1) : kind;
-  return bare.replace(new RegExp(`-${singular}$`), "");
+  const suffix = KIND_SUFFIX[kind];
+  if (!suffix) return bare;
+  return bare.replace(new RegExp(`-${suffix}$`), "");
 }
 
 function buildIndex() {
