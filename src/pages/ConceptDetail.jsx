@@ -10,6 +10,7 @@ import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
 import MasksVisual from "../components/visuals/MasksVisual";
 import PositionalInformationVisual from "../components/visuals/PositionalInformationVisual";
 import EncoderDecoderAttentionVisual from "../components/visuals/EncoderDecoderAttentionVisual";
+import AttentionInternalsVisual from "../components/visuals/AttentionInternalsVisual";
 import { conceptGroups } from "../data/concepts";
 import {
   isConceptCompleted,
@@ -86,6 +87,10 @@ function ConceptVisual({ conceptId }) {
 
   if (conceptId === "encoder-vs-decoder-attention") {
     return <EncoderDecoderAttentionVisual />;
+  }
+
+  if (conceptId === "attention-internals") {
+    return <AttentionInternalsVisual />;
   }
 
   return (
