@@ -603,6 +603,34 @@ export const conceptGroups = [
       "Residuals improve gradient flow in deep models.",
       "Transformer blocks usually have one residual around attention and one around FFN.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "You remove the residual connections from a 24-layer Transformer and try to train it from scratch with the same hyperparameters. What is the most likely outcome and why?",
+      options: [
+        {
+          text:
+            "Training loss diverges or stalls: gradients vanish across depth because there is no identity path, and the model must learn a useful transformation at every layer starting from random init.",
+          correct: true,
+          feedback:
+            "Right — residuals give gradients an untouched identity path from the output back to every earlier layer. Without them, gradients pass through 24 back-to-back learned transformations and typically vanish or explode. At init, a residual block is approximately the identity (small sublayer output on top of x), so the network starts by 'doing nothing' and gradually learns updates. Removing residuals removes that graceful-init property too.",
+        },
+        {
+          text:
+            "Training works fine but inference is slower because each layer must compute a full transformation instead of just an update.",
+          correct: false,
+          feedback:
+            "Inference cost is nearly identical — the residual add is one elementwise op on top of the sublayer computation. The failure is at training time (gradient flow), not inference time (compute).",
+        },
+        {
+          text:
+            "The model overfits earlier because it has fewer degrees of freedom without the residual paths.",
+          correct: false,
+          feedback:
+            "Removing residuals doesn't reduce parameters — it removes an addition, not a weight. If anything, deep no-residual stacks under-fit because they can't train, not over-fit.",
+        },
+      ],
+    },
   },
 },
       {
@@ -651,6 +679,34 @@ export const conceptGroups = [
       "Gamma and beta are learnable scale and shift parameters.",
       "LayerNorm is critical for stable deep Transformer training.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "Why does LayerNorm work well for Transformers where BatchNorm often fails, even though both aim to normalize activations?",
+      options: [
+        {
+          text:
+            "LayerNorm computes statistics per-token over the feature dim, so it is independent of batch size and sequence length; BatchNorm needs a batch of similar samples per position and breaks with variable-length sequences and batch size 1.",
+          correct: true,
+          feedback:
+            "Right — LayerNorm's mean and variance come from one token's D features. That means batch size 1 works, variable sequence lengths work, and inference behaves identically to training. BatchNorm's per-position stats fall apart when batches have padded/mixed lengths and require running-stats bookkeeping at inference.",
+        },
+        {
+          text:
+            "LayerNorm is faster to compute than BatchNorm, so it trains larger models within the same time budget.",
+          correct: false,
+          feedback:
+            "Compute cost is roughly the same — both are elementwise normalization + affine transform. The advantage is statistical, not computational: LayerNorm's statistics don't depend on other samples in the batch.",
+        },
+        {
+          text:
+            "LayerNorm has learned parameters γ and β while BatchNorm does not, so LayerNorm has more capacity.",
+          correct: false,
+          feedback:
+            "BatchNorm also has learned γ and β. Capacity is not the differentiator. The differentiator is where the statistics come from — features within one sample (LayerNorm) vs samples within one batch (BatchNorm).",
+        },
+      ],
+    },
   },
 },
       {
@@ -698,6 +754,34 @@ export const conceptGroups = [
       "Post-LN can be more difficult to train at large depth.",
       "Both preserve the (B, T, D) interface.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "You port a 24-layer Post-LN Transformer implementation to Pre-LN, keeping every other hyperparameter identical. Training previously required a learning-rate warmup schedule. What happens now?",
+      options: [
+        {
+          text:
+            "Training becomes stable without warmup: Pre-LN keeps the residual path unnormalized end-to-end, so gradients flow through a clean identity backbone. Post-LN normalized every residual sum, warping gradients at depth.",
+          correct: true,
+          feedback:
+            "Right — this is the exact reason modern deep LLMs default to Pre-LN. The identity path in Pre-LN (x = x + f(LN(x))) never passes through a normalization layer, so gradients reach earlier blocks unwarped. Post-LN's outer LN rescales the sum at every layer, which historically required careful warmup to keep training from diverging in the first few thousand steps.",
+        },
+        {
+          text:
+            "Training becomes faster per-step because Pre-LN does fewer LayerNorm operations than Post-LN.",
+          correct: false,
+          feedback:
+            "Both variants apply LayerNorm twice per block. The math cost is identical; the difference is where the norm sits in the residual pathway, not how many norms there are.",
+        },
+        {
+          text:
+            "Pre-LN outputs are always exactly LayerNormed, so the final output is easier for downstream layers to consume without further normalization.",
+          correct: false,
+          feedback:
+            "The opposite is true. Pre-LN's residual stream accumulates unnormalized updates and can grow in magnitude, which is why a final LayerNorm at the top of the stack is standard. Post-LN's outputs are already normalized by the outer LN in each block.",
+        },
+      ],
+    },
   },
 },
       {
@@ -747,6 +831,34 @@ export const conceptGroups = [
       "The activation makes the FFN nonlinear and expressive.",
       "The output must return to D to preserve the Transformer block interface.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "In a Transformer block with D = 4096 and the standard 4× hidden expansion, the FFN sublayer contains roughly how many parameters compared to the multi-head attention sublayer, and why does this matter?",
+      options: [
+        {
+          text:
+            "FFN has about 2× more parameters than MHA. In modern LLMs the FFN sublayers hold the majority of the total parameter count and are where most parameter-efficient tuning (LoRA, adapters) targets.",
+          correct: true,
+          feedback:
+            "Right — MHA has 4 · D² ≈ 67M params (four D×D projections). FFN has 2 · D · 4D = 8D² ≈ 134M params (two matrices, D→4D→D). So FFN ≈ 2× MHA per block, and across dozens of blocks that's the majority of the model's weights. LoRA typically targets Q/V projections but the biggest capacity lives in the FFNs.",
+        },
+        {
+          text:
+            "MHA has more parameters because it needs 4 projection matrices (Q, K, V, output), while FFN only has 2 linears.",
+          correct: false,
+          feedback:
+            "Counting matrices is a trap. MHA's 4 matrices are all D×D. FFN's 2 matrices are D×4D and 4D×D — each is 4× the size of one MHA matrix. So 2 · 4 = 8D² for FFN vs 4 · 1 = 4D² for MHA.",
+        },
+        {
+          text:
+            "They have roughly equal parameter counts because both operate on shape (B, T, D).",
+          correct: false,
+          feedback:
+            "Shape doesn't determine parameter count — the weight matrix sizes do. FFN's hidden dim is 4D, and it uses two of those matrices, giving it substantially more parameters than MHA per block.",
+        },
+      ],
+    },
   },
 },
       {
@@ -801,6 +913,34 @@ export const conceptGroups = [
       "The block preserves shape: (B, T, D).",
       "Transformer models are built by stacking these blocks.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "Someone claims their custom Transformer block skips the FFN sublayer 'to save compute' and only uses multi-head attention plus residual + LayerNorm. What is the strongest single objection to this design?",
+      options: [
+        {
+          text:
+            "Without FFN there is no per-token nonlinear transformation. Attention is essentially a weighted linear combination of value vectors; stacking many such layers without FFN collapses toward a linear model plus softmax.",
+          correct: true,
+          feedback:
+            "Right — attention's only nonlinearity is softmax over scores, which mixes information but does not add expressive nonlinear feature transforms per token. The FFN provides that (D → 4D → D with GELU/SwiGLU in the middle). Removing it hollows out most of the model's representational power, regardless of how deep the stack is.",
+        },
+        {
+          text:
+            "You lose most of the model's parameters, so the model won't have enough capacity to fit any dataset.",
+          correct: false,
+          feedback:
+            "Parameter count is a consequence, not the fundamental objection. You could scale D or add heads to recover parameter count. The real problem is the missing nonlinearity — capacity without nonlinearity is still a fancy linear model.",
+        },
+        {
+          text:
+            "The block will no longer preserve shape (B, T, D) because the FFN is what maps back to D.",
+          correct: false,
+          feedback:
+            "Attention already preserves (B, T, D). Multi-head attention's output projection maps H · D_h back to D. So skipping the FFN doesn't break the shape interface — it just removes the per-token nonlinear transform.",
+        },
+      ],
+    },
   },
 },
       {
@@ -850,6 +990,34 @@ export const conceptGroups = [
       "More blocks also increase compute, memory, and latency.",
       "Stable shape is what makes deep Transformer stacks possible.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "GPT-3 has 96 Transformer blocks stacked; earlier models like GPT-2 have 12–48. What single property of one block makes this trivially composable, and what breaks if you naively stack 96 blocks without other design choices?",
+      options: [
+        {
+          text:
+            "Each block preserves the (B, T, D) shape, so stacking is just a for-loop. But naive stacking without Pre-LN and residuals produces vanishing/exploding gradients at that depth — Pre-LN + residuals are what make 96-block training feasible.",
+          correct: true,
+          feedback:
+            "Right — shape preservation is the composability property (a block's output can be another block's input). Depth of 96 exposes gradient stability issues that a shallow stack hides. Pre-LN keeps the residual identity path clean; residuals give gradients a direct backbone; without both, training a 96-layer stack from scratch diverges. This is why every large modern LLM is Pre-LN with residuals, and typically adds a final LayerNorm at the top.",
+        },
+        {
+          text:
+            "The shared attention weights across blocks make stacking trivial; without weight sharing, 96 blocks would have too many parameters to fit in memory.",
+          correct: false,
+          feedback:
+            "Standard Transformer blocks do NOT share weights across depth — every block has its own Q, K, V, FFN parameters. That's the source of most of the model's capacity. Universal Transformers and ALBERT do share weights, but that's a variant, not the default.",
+        },
+        {
+          text:
+            "Attention's O(T²) cost is what limits depth, so stacking 96 blocks requires reducing sequence length to compensate.",
+          correct: false,
+          feedback:
+            "Depth (N blocks) and sequence length (T) affect compute in orthogonal ways: cost scales as O(N · T² · D). Stacking more blocks doesn't force you to shorten sequences — it just costs more compute per token. The composability question is about gradient stability, not sequence length.",
+        },
+      ],
+    },
   },
 },
     ],
