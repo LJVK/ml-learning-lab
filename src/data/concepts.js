@@ -364,6 +364,34 @@ export const conceptGroups = [
       "Masked scores should become -inf or a very large negative value.",
       "Causal masking is essential for autoregressive models.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "A decoder self-attention layer produces NaN in the output at inference. You inspect the mask and find that one row of the attention matrix is fully blocked (every key is either PAD or in the future). What is happening?",
+      options: [
+        {
+          text:
+            "The softmax denominator becomes exp(-inf) + exp(-inf) + … = 0, so every masked score divided by 0 gives NaN.",
+          correct: true,
+          feedback:
+            "Right — softmax of an all-masked row is 0/0 = NaN. Common causes: a causal mask at position 0 combined with a padding mask that blocks position 0 too, or an off-by-one in mask construction. Production code guards against this by using a large negative constant (e.g. -1e9) with a small clamp, or by ensuring every query row has at least one allowed key.",
+        },
+        {
+          text:
+            "The −∞ values overflow float16 during the softmax and produce NaN downstream.",
+          correct: false,
+          feedback:
+            "Softmax of finite scores in float16 is stable — the max-subtraction trick inside softmax handles range. The NaN here comes from a fully-masked row: 0 / 0 after normalization, not overflow.",
+        },
+        {
+          text:
+            "Applying the mask after softmax instead of before allows blocked positions to still leak probability, which corrupts the normalization.",
+          correct: false,
+          feedback:
+            "That is a real bug, but it produces incorrect weights (not NaN) — blocked positions get some non-zero probability. The NaN symptom specifically points to an all-masked row.",
+        },
+      ],
+    },
   },
 },
       {
@@ -416,6 +444,34 @@ export const conceptGroups = [
       "Encoder-decoder models use cross attention from decoder to encoder.",
       "Cross-attention output length follows the decoder/query sequence.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "You are implementing an encoder-decoder Transformer with 6 encoder blocks and 6 decoder blocks. How many times does the encoder actually run per training step, and what does each decoder block use as its cross-attention K/V input?",
+      options: [
+        {
+          text:
+            "The encoder runs once. Its final output H_enc (shape B × T_source × D) is reused as the K/V input by all 6 decoder blocks' cross-attention sublayers.",
+          correct: true,
+          feedback:
+            "Right — one encoder pass produces one H_enc tensor. Every decoder block re-projects that same H_enc into its own K and V using that block's W_k and W_v. This is why the cross-attention arrows fan out from the top of the encoder to every decoder block: same signal, block-specific projections.",
+        },
+        {
+          text:
+            "The encoder runs 6 times, once per decoder block, so each decoder block gets a freshly computed encoder representation.",
+          correct: false,
+          feedback:
+            "That would multiply compute by 6× for no gain. The encoder is deterministic given its input, so running it repeatedly gives the same H_enc. Modern implementations cache the encoder output once per forward pass.",
+        },
+        {
+          text:
+            "Each decoder block cross-attends to the corresponding encoder block at the same depth (decoder 1 ↔ encoder 1, etc.).",
+          correct: false,
+          feedback:
+            "Not the standard design. In the original Transformer, every decoder block attends to the encoder's TOP output. Some experimental variants use per-depth attention, but the default is 'top of encoder → every decoder block'.",
+        },
+      ],
+    },
   },
 },
       {
@@ -465,6 +521,34 @@ export const conceptGroups = [
       "RoPE makes Q/K interactions position-aware.",
       "Long-context models depend heavily on good positional handling.",
     ],
+
+    recallQuestion: {
+      prompt:
+        "You train a model with learned positional embeddings and max_len = 2048. At inference you feed it a 4096-token document and outputs after position 2048 look garbled. Why?",
+      options: [
+        {
+          text:
+            "Learned positional embeddings are a lookup table of size max_len; there is no learned vector for positions ≥ 2048, so the model has never seen those positions during training.",
+          correct: true,
+          feedback:
+            "Right — learned PE is essentially nn.Embedding(max_len, D), and inputs past max_len either index-out-of-bounds or fall back to garbage. Fixes: retrain with larger max_len, switch to sinusoidal PE (deterministic, extrapolates by formula), or switch to RoPE (relative, extrapolates via rotation). This is why most long-context LLMs use RoPE.",
+        },
+        {
+          text:
+            "The attention mechanism only supports up to 2048 tokens — beyond that, self-attention scores overflow.",
+          correct: false,
+          feedback:
+            "Attention itself has no built-in length limit. The √d_k scaling keeps scores well-behaved regardless of sequence length. The failure is specifically at the positional-encoding layer, not attention.",
+        },
+        {
+          text:
+            "Sinusoidal PE gets ambiguous past max_len because sines and cosines wrap around.",
+          correct: false,
+          feedback:
+            "This describes sinusoidal PE, but the question is about learned PE. Sinusoidal PE has a valid value at every integer position — high-frequency dims do repeat, but low-frequency dims stay unique enough that the fingerprint remains distinguishable well beyond training length.",
+        },
+      ],
+    },
   },
 },
     ],
