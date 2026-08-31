@@ -8,6 +8,7 @@ import MultiHeadAttentionVisual from "../components/visuals/MultiHeadAttentionVi
 import SelfAttentionVisual from "../components/visuals/SelfAttentionVisual";
 import CrossAttentionVisual from "../components/visuals/CrossAttentionVisual";
 import MasksVisual from "../components/visuals/MasksVisual";
+import PositionalInformationVisual from "../components/visuals/PositionalInformationVisual";
 import { conceptGroups } from "../data/concepts";
 import {
   isConceptCompleted,
@@ -76,6 +77,10 @@ function ConceptVisual({ conceptId }) {
 
   if (conceptId === "masks") {
     return <MasksVisual />;
+  }
+
+  if (conceptId === "positional-information") {
+    return <PositionalInformationVisual />;
   }
 
   return (
